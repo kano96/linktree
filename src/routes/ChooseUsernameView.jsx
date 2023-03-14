@@ -3,6 +3,8 @@ import AuthProvider from "../components/AuthProvider";
 import { useNavigate, Link } from "react-router-dom";
 import { existsUsername, updateUser } from "../firebase/firebase";
 
+import style from "./ChooseUsername.module.css";
+
 const ChooseUsernameView = () => {
   const navigate = useNavigate();
   const [currentState, setCurrentState] = useState("Loading");
@@ -39,7 +41,7 @@ const ChooseUsernameView = () => {
 
   if (["NOT_REGISTERED", "USERNAME_TAKEN"].includes(currentState)) {
     return (
-      <div>
+      <div className={style.chooseUsernameContainer}>
         <h1>Bienvenido {currentUser.displayName}</h1>
         <p>Para terminar el proceso elige un nombre de usuario</p>
 
@@ -47,10 +49,12 @@ const ChooseUsernameView = () => {
           <p>El nombre de usuario ya existe, escoge otro</p>
         )}
         <div>
-          <input type="text" onChange={handleInputUsername} />
+          <input className="input" type="text" onChange={handleInputUsername} />
         </div>
         <div>
-          <button onClick={handleContinue}>Continuar</button>
+          <button className="btn" onClick={handleContinue}>
+            Continuar
+          </button>
         </div>
       </div>
     );
@@ -58,7 +62,7 @@ const ChooseUsernameView = () => {
 
   if (currentState === "COMPLETED") {
     return (
-      <div>
+      <div className={style.chooseUsernameContainer}>
         <h2>Felicidades! Ya puedes crear tus links</h2>
         <Link to="/dashboard">Continuar</Link>
       </div>

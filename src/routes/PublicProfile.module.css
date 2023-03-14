@@ -1,0 +1,17 @@
+.profileContainer {
+    width: 500px;
+    margin: 100px auto;
+    text-align: center;
+  }
+  
+.profilePicture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.publicLinksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

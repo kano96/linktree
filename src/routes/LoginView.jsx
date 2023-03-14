@@ -4,9 +4,11 @@ import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import AuthProvider from "../components/AuthProvider";
 
+import style from "./LoginView.module.css";
+
 const LoginView = () => {
   const navigate = useNavigate();
-  const [currentState, setCurrentState] = useState("Loading");
+  const [currentState, setCurrentState] = useState("");
 
   const handleOnClick = async () => {
     const googleProvider = new GoogleAuthProvider();
@@ -16,7 +18,6 @@ const LoginView = () => {
   const signInWithGoogle = async (googleProvider) => {
     try {
       const res = await signInWithPopup(auth, googleProvider);
-      console.log(res);
     } catch (error) {
       console.error(error);
     }
@@ -34,8 +35,11 @@ const LoginView = () => {
 
   if (currentState === "NOT_AUTHENTICATED") {
     return (
-      <div>
-        <button onClick={handleOnClick}>Login with Google</button>
+      <div className={style.loginView}>
+        <h1>Link Tree</h1>
+        <button className={style.provider} onClick={handleOnClick}>
+          Login with Google
+        </button>
       </div>
     );
   }

@@ -59,7 +59,9 @@ export const registerNewUser = async (user) => {
     const collectionRef = collection(db, "users");
     const docRef = doc(collectionRef, user.uid);
     await setDoc(docRef, user);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const updateUser = async (user) => {
@@ -77,7 +79,9 @@ export const getUserInfo = async (uid) => {
     const docRef = doc(db, "users", uid);
     const document = await getDoc(docRef);
     return document.data();
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const insertNewLink = async (link) => {
@@ -85,6 +89,83 @@ export const insertNewLink = async (link) => {
     const docRef = collection(db, "links");
     const res = await addDoc(docRef, link);
     return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getLinks = async (uid) => {
+  const links = [];
+
+  try {
+    const collectionRef = collection(db, "links");
+    const q = query(collectionRef, where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      const link = { ...doc.data() };
+      link.docId = doc.id;
+      links.push(link);
+    });
+
+    return links;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateLink = async (docId, link) => {
+  try {
+    const docRef = doc(db, "links", docId);
+    const res = await setDoc(docRef, link);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteLink = async (docId) => {
+  try {
+    const docRef = doc(db, "links", docId);
+    const res = await deleteDoc(docRef);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const setUserProfilePhoto = async (uid, file) => {
+  try {
+    const imageRef = ref(storage, `images/${uid}`);
+    const resUpload = await uploadBytes(imageRef, file);
+    return resUpload;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getProfilePhotoUrl = async (profilePicture) => {
+  try {
+    const imageRef = ref(storage, profilePicture);
+
+    const url = await getDownloadURL(imageRef);
+
+    return url;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUserPublicInfo = async (uid) => {
+  const profileInfo = await getUserInfo(uid);
+  const linksInfo = await getLinks(uid);
+
+  return { profileInfo, linksInfo };
+};
+
+export const logout = async () => {
+  try {
+    await auth.signOut();
   } catch (error) {
     console.error(error);
   }
